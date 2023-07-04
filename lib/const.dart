@@ -1,1 +1,1 @@
-String baseUrl = 'https://dhcourse.digitiostack.co.in/api/v1';
+String baseUrl = 'https://dhcourse-server.vercel.app/api/v1';

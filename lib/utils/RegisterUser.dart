@@ -5,23 +5,23 @@ import 'package:http/http.dart' as http;
 
 Future<String?> registerUser(String email, String password, String name,
     String confirmPassword, BuildContext context) async {
-  if (name == null || name.isEmpty) {
+  if (name.isEmpty) {
     throw 'Please enter your name';
   }
   if (confirmPassword != password) {
     throw 'Passwords do not match';
   }
-  if (confirmPassword == null || confirmPassword.isEmpty) {
+  if (confirmPassword.isEmpty) {
     throw 'Please enter your confirm password';
   }
-  if (email == null || email.isEmpty) {
+  if (email.isEmpty) {
     throw 'Please enter your email';
   }
-  if (password == null || password.isEmpty) {
+  if (password.isEmpty) {
     throw 'Please enter your password';
   }
   final response = await http.post(
-    Uri.parse('https://dhcourse.digitiostack.co.in/api/v1/auth/signup'),
+    Uri.parse('https://dhcourse-server.vercel.app/api/v1/auth/signup'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -35,7 +35,7 @@ Future<String?> registerUser(String email, String password, String name,
     final email = json.decode(response.body)['user']['email'];
 
     Navigator.push(
-      context as BuildContext,
+      context,
       MaterialPageRoute(
         builder: (context) => OtpScreen(email: email),
       ),
@@ -46,4 +46,5 @@ Future<String?> registerUser(String email, String password, String name,
     final error = json.decode(response.body)['message'];
     throw error;
   }
+  return null;
 }

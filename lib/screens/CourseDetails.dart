@@ -7,7 +7,8 @@ class CourseDetailsPage extends StatefulWidget {
   final String slug;
   final String thumbnail;
 
-  CourseDetailsPage({required this.slug, required this.thumbnail});
+  const CourseDetailsPage(
+      {super.key, required this.slug, required this.thumbnail});
 
   @override
   _CourseDetailsPageState createState() => _CourseDetailsPageState();
@@ -23,7 +24,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     final videoId = YoutubePlayer.convertUrlToId(videoUrl);
     _controller = YoutubePlayerController(
         initialVideoId: videoId!,
-        flags: YoutubePlayerFlags(
+        flags: const YoutubePlayerFlags(
           autoPlay: false,
         ));
 
@@ -32,7 +33,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
 
   Future<Map<String, dynamic>> _fetchCourseData() async {
     final response = await http.get(Uri.parse(
-        'https://dhcourse.digitiostack.co.in/api/v1/course/${widget.slug}'));
+        'https://dhcourse-server.vercel.app/api/v1/course/${widget.slug}'));
     final jsonData = await json.decode(response.body);
     return jsonData;
   }
@@ -44,7 +45,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
         controller: _controller,
         showVideoProgressIndicator: true,
         progressIndicatorColor: Colors.amber,
-        progressColors: ProgressBarColors(
+        progressColors: const ProgressBarColors(
           playedColor: Colors.amber,
           handleColor: Colors.amberAccent,
         ),
@@ -62,7 +63,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.6),
-                          offset: Offset(
+                          offset: const Offset(
                             0.0,
                             10.0,
                           ),
@@ -80,7 +81,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       ),
                     ),
                   ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'About the course',
@@ -99,7 +100,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           courseData['title'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20,
                               color: Color.fromARGB(255, 17, 103, 109),
                               fontWeight: FontWeight.bold),
@@ -109,7 +110,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Amount: ₹${courseData['price'].toString()}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 32, 142, 98),
                           ),
@@ -119,14 +120,14 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           courseData['description'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                             color: Colors.grey,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           "Lessons",
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -147,14 +148,14 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Color.fromARGB(255, 16, 100, 106),
+                                color: const Color.fromARGB(255, 16, 100, 106),
                               ),
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 6),
                               child: Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: CircleAvatar(
                                       backgroundColor: Colors.white,
                                       child: Icon(
@@ -167,7 +168,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     padding: const EdgeInsets.all(18.0),
                                     child: Text(
                                       lesson['videoTitle'].toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           color: Colors.white),
@@ -182,8 +183,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                     ],
                   );
                 } else if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'Error loading course data',
                       style: TextStyle(
@@ -193,8 +194,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                     ),
                   );
                 } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'Loading course data...',
                       style: TextStyle(fontSize: 13, color: Colors.grey),

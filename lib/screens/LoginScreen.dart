@@ -1,16 +1,17 @@
 import 'package:dh_course_application/screens/HomeScreen.dart';
 import 'package:dh_course_application/screens/RegisterScreen.dart';
-import 'package:dh_course_application/utils/LoginUser.dart';
+import 'package:dh_course_application/utils/AuthServices.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -38,13 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       } else {
         // Show an error message.
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Invalid email or password.'),
           ),
         );
@@ -66,26 +67,26 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 244, 244, 244),
+      backgroundColor: const Color.fromARGB(255, 244, 244, 244),
       body: SafeArea(
           child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(
+          const Icon(
             Icons.person,
             size: 130,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text(
+          const Text(
             'Login to your account',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -99,17 +100,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none, hintText: 'Email'),
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Password',
                   ),
@@ -132,14 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Container(
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 75, 38, 160),
+                  color: const Color.fromARGB(255, 75, 38, 160),
                   borderRadius: BorderRadius.circular(15)),
               child: Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -149,8 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Center(
                       child: _isLoading
-                          ? CircularProgressIndicator()
-                          : Text(
+                          ? const CircularProgressIndicator()
+                          : const Text(
                               "Sign In",
                               style: TextStyle(
                                   color: Colors.white,
@@ -161,19 +162,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   )),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Don't have an account? "),
+              const Text("Don't have an account? "),
               InkWell(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
+                      MaterialPageRoute(builder: (context) => const SignupScreen()));
                 },
-                child: Text(
+                child: const Text(
                   'Register Now',
                   style: TextStyle(color: Colors.lightBlue),
                 ),

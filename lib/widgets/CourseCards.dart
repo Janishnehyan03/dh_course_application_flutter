@@ -1,32 +1,64 @@
 import 'package:dh_course_application/screens/CourseDetails.dart';
 import 'package:dh_course_application/screens/LoginScreen.dart';
+import 'package:dh_course_application/screens/Payment.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CourseCard extends StatelessWidget {
+class CourseCard extends StatefulWidget {
   final String title;
   final String price;
   final String slug;
   final String description;
+  final String courseId;
+  final List learners;
   final String thumbnail;
-  CourseCard(
-      {required this.title,
+  const CourseCard(
+      {super.key, required this.title,
       required this.price,
+      required this.learners,
       required this.slug,
       required this.thumbnail,
+      required this.courseId,
       required this.description});
+
+  @override
+  State<CourseCard> createState() => _CourseCardState();
+}
+
+class _CourseCardState extends State<CourseCard> {
+  String userId = '';
+
+  Future<String?> getUserIdFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+   if(userId != null){
+     setState(() {
+      userId = userId;
+    });
+   }
+    return userId;
+  }
+
+  @override
+  void initState() {
+    print(userId);
+    // TODO: implement initState
+    super.initState();
+    getUserIdFromSharedPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color.fromARGB(255, 225, 225, 225)),
+          color: const Color.fromARGB(255, 225, 225, 225)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             width: MediaQuery.of(context).size.width,
             height: 180,
             decoration: BoxDecoration(
@@ -35,7 +67,7 @@ class CourseCard extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.6),
-                  offset: Offset(
+                  offset: const Offset(
                     0.0,
                     10.0,
                   ),
@@ -48,7 +80,7 @@ class CourseCard extends StatelessWidget {
                   Colors.black.withOpacity(0.35),
                   BlendMode.multiply,
                 ),
-                image: NetworkImage(thumbnail),
+                image: NetworkImage(widget.thumbnail),
                 fit: BoxFit.cover,
               ),
             ),
@@ -56,8 +88,8 @@ class CourseCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              title,
-              style: TextStyle(
+              widget.title,
+              style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 20,
                   color: Color.fromARGB(255, 13, 71, 89)),
@@ -66,33 +98,52 @@ class CourseCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Text(
-              description,
-              style: TextStyle(color: Color.fromARGB(255, 110, 109, 109)),
+              widget.description,
+              style: const TextStyle(color: Color.fromARGB(255, 110, 109, 109)),
             ),
           ),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
             child: ElevatedButton(
               onPressed: () {
                 userExists().then((exists) => {
                       if (exists)
                         {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CourseDetailsPage(
-                                  slug: slug,
-                                  thumbnail: thumbnail,
-                                ),
-                              ))
+                          getUserIdFromSharedPreferences().then((value) => {
+                                if (widget.learners.contains(value))
+                                  {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CourseDetailsPage(
+                                            slug: widget.slug,
+                                            thumbnail: widget.thumbnail,
+                                          ),
+                                        ))
+                                  }
+                                else
+                                  {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PaymentScreen(
+                                            courseId: widget.courseId,
+                                            title: widget.title,
+                                            thumbnail: widget.thumbnail,
+                                            price: int.parse(widget.price),
+                                          ),
+                                        ))
+                                  }
+                              })
                         }
                       else
                         {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (context) => const LoginScreen(),
                             ),
                           )
                         }
@@ -100,17 +151,21 @@ class CourseCard extends StatelessWidget {
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromARGB(255, 5, 57, 62)),
+                    widget.learners.contains(userId)
+                        ? const Color.fromARGB(255, 81, 36, 192)
+                        : const Color.fromARGB(255, 5, 57, 62)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 padding: MaterialStateProperty.all<EdgeInsets>(
-                  EdgeInsets.symmetric(vertical: 10),
+                  const EdgeInsets.symmetric(vertical: 10),
                 ),
               ),
-              child: Text('Buy Now ₹ ${price}'),
+              child: Text(widget.learners.contains(userId)
+                  ? 'Learn Now'
+                  : 'Buy Now ₹ ${widget.price}'),
             ),
           ),
         ],

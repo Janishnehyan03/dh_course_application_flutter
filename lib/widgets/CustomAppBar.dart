@@ -1,126 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final double appBarHeight = 100.0;
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: SharedPreferences.getInstance(),
-      builder:
-          (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-        if (!snapshot.hasData) {
-          return SizedBox(
-            height: appBarHeight,
-            child: AppBar(
-              backgroundColor: Color.fromARGB(255, 9, 96, 104),
-              title: Text('My App'),
-              centerTitle: true,
-            ),
-          );
-        }
-        final sharedPreferences = snapshot.data!;
-        final userName = sharedPreferences.getString('username');
-        return SizedBox(
-          height: appBarHeight,
-          child: AppBar(
-            backgroundColor: Color.fromARGB(255, 9, 96, 104),
-            title: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'My App',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  if (userName != null)
-                    Text(
-                      userName,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                ],
-              ),
-            ),
-            centerTitle: true,
-            actions: <Widget>[
-              if (userName != null)
-                GestureDetector(
-                  onTap: () => _showProfileDialog(context, userName),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: CircleAvatar(
-                      child: Text(userName[0]),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(appBarHeight);
-
-  void _showProfileDialog(BuildContext context, String userName) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Profile',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircleAvatar(
-                radius: 50,
-                child: Text(
-                  userName[0],
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Image.network(
+                "https://seeklogo.com/images/U/udemy-wordmark-logo-5BA74BCA61-seeklogo.com.png",
+                width: 100,
+                height: 100,
+                color: Colors.black,
               ),
-              SizedBox(height: 16),
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'user@example.com',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
+              IconButton(
+                icon: Icon(Icons.person),
+                onPressed: () => {},
               ),
             ],
           ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: Text(
-                'Close',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        );
-      },
+          Text(
+            "Welcome, Janish Nehyan!",
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ],
+      ),
     );
   }
+  
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(100); // Set the desired height of the app bar
 }

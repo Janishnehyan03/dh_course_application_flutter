@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../screens/LoginScreen.dart';
-
 class OtpScreen extends StatefulWidget {
   @override
   State<OtpScreen> createState() => _OtpScreenState();
   final String email;
-  OtpScreen({required this.email});
+  const OtpScreen({super.key, required this.email});
 }
 
 class _OtpScreenState extends State<OtpScreen> {
@@ -28,7 +26,7 @@ class _OtpScreenState extends State<OtpScreen> {
       _isLoading = true;
     });
     final response = await http.post(
-      Uri.parse('https://dhcourse.digitiostack.co.in/api/v1/auth/verify-token'),
+      Uri.parse('https://dhcourse-server.vercel.app/api/v1/auth/verify-token'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -38,18 +36,19 @@ class _OtpScreenState extends State<OtpScreen> {
       }),
     );
     if (response.statusCode == 200) {
+      print(response.body);
       final authToken = json.decode(response.body)['token'];
       final username = json.decode(response.body)['name'];
       final userId = json.decode(response.body)['id'];
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('authToken', authToken);
-      await prefs.setString('username', username);
-      await prefs.setString('userId', userId);
+      if (authToken) await prefs.setString('authToken', authToken);
+      if (username) await prefs.setString('username', username);
+      if (userId) await prefs.setString('userId', userId);
       setState(() {
         _isLoading = false;
       });
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } else {
       setState(() {
         _isLoading = false;
@@ -63,23 +62,23 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 244, 244, 244),
+      backgroundColor: const Color.fromARGB(255, 244, 244, 244),
       body: SafeArea(
           child: SingleChildScrollView(
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Type Your OTP here',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -94,20 +93,20 @@ class _OtpScreenState extends State<OtpScreen> {
                       return null;
                     },
                     controller: otpController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none, hintText: 'OTP'),
                   ),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 15, 104, 151),
+                    color: const Color.fromARGB(255, 15, 104, 151),
                     borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -117,8 +116,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       },
                       child: Center(
                         child: _isLoading
-                            ? CircularProgressIndicator()
-                            : Text(
+                            ? const CircularProgressIndicator()
+                            : const Text(
                                 "submit",
                                 style: TextStyle(
                                     color: Colors.white,
@@ -129,16 +128,16 @@ class _OtpScreenState extends State<OtpScreen> {
                     )),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("we have sent an email to your email"),
+                const Text("we have sent an email to your email"),
                 Text(
                   " ${widget.email}",
-                  style: TextStyle(color: Colors.lightBlue),
+                  style: const TextStyle(color: Colors.lightBlue),
                 ),
               ],
             )

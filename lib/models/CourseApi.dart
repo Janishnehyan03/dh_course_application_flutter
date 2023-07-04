@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class CourseApi {
   static Future<List<Course>> getCourses() async {
     var uri = Uri.parse(
-      "${baseUrl}/course",
+      "$baseUrl/course",
     );
     final response = await http.get(
       uri,
@@ -22,7 +22,7 @@ class CourseApi {
   }
   static Future<List<Course>> getOneCourse({courseId}) async {
     var uri = Uri.parse(
-      "${baseUrl}/course/${courseId}",
+      "$baseUrl/course/$courseId",
     );
     final response = await http.get(
       uri,
